@@ -1,0 +1,25 @@
+{
+  "name": "atomity-core",
+  "version": "0.1.0",
+  "private": true,
+  "main": "lib/index.js",
+  "dependencies": {
+    "moment": "^2.18.1",
+    "moment-timezone": "^0.5.13",
+    "qnium-events": "git+https://github.com/qnium/events.git"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1"
+  },
+  "babel": {
+    "presets": [
+      "es2015", "react"
+    ]
+  },
+  "scripts": {
+    "compile": "babel -d lib/ src/"
+  }
+}
