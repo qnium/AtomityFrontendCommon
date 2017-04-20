@@ -20,6 +20,6 @@
     ]
   },
   "scripts": {
-    "compile": "babel -d lib/ src/"
+    "build": "babel -d lib/ src/"
   }
 }
