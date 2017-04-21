@@ -52,7 +52,11 @@ class FileDataProvider
     getEntityData(entityName, data) {
         var req = this.createReadRequest(entityName, data);
         var loaded = this.storage[entityName] ? this.getPromiseWithScopeDigest() : this.loadEntitiesFromJson(entityName);
-        return loaded.then(() => this.getPreparedEntityDataForReadAction(req, entityName));
+        return loaded.then(() => 
+            this.fillRelatedEntities(entityName).then(() => 
+                this.getPreparedEntityDataForReadAction(req, entityName)
+            )
+        )
     }
 
     getRelatedEntityData(entityName, data) {
@@ -110,7 +114,7 @@ class FileDataProvider
                     let relatedEntities = result.data;
                     return this.storage[entityName].records.forEach((entity, i, arr) => {
                         entity[relationship.relatedEntity] = relatedEntities.find((relatedEntity, index, array) =>
-                            entity[relationship.field] === relatedEntity[relationship.relatedEntityField]);
+                            entity[relationship.field] == relatedEntity[relationship.relatedEntityField]);
                     });
                 }));
         });

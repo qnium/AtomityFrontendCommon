@@ -22,18 +22,28 @@ let ListControllerEvents =
 
 class ListController
 {
+    static ctrlNameCounter;
+
+    static get defaultCtrlName() {
+        return "defaultCtrlName";
+    }
+    
     constructor(params)
     {
+        if(!ListController.ctrlNameCounter){
+            ListController.ctrlNameCounter = 0;
+        }
+        
         dataProvider.init({apiEndpoint: 'demoApi'});
         dataProvider.setSessionKey('demoSessionKey');
         
         // params
         if(params) {
             this.entitiesName = params.entitiesName;
-            this.ctrlName = params.ctrlName;
+            this.ctrlName = params.ctrlName || (ListController.defaultCtrlName + ListController.ctrlNameCounter++);
             this.readAction = params.readAction || "read";
             this.deleteAction = params.deleteAction || "delete";
-            this.pageDataLength = params.pageDataLength || 10; // FIX for 0
+            this.pageDataLength = params.pageDataLength == 0 ? 0 : (params.pageDataLength || 10);
             this.useDummyRows = params.useDummyRows;
             this.entityKeyField = params.entityKeyField || "id";
         }
@@ -168,7 +178,7 @@ class ListController
     }
 
     updatePaginationInfo() {
-        this.totalPages = Math.ceil(this.totalRecords / this.pageDataLength);
+        this.totalPages = this.pageDataLength == 0 ? 1 : Math.ceil(this.totalRecords / this.pageDataLength);
         this.totalPages = Math.max(1, this.totalPages);
         this.nextPageAvailable = this.currentPage < this.totalPages;
         this.prevPageAvailable = this.currentPage > 1;
