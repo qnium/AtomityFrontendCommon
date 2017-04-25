@@ -1,3 +1,6 @@
+import moment from 'moment';
+import 'moment-timezone';
+
 /**
  * Provides access to backend API.
  */
@@ -220,11 +223,19 @@ class FileDataProvider
             } else if (operation === 'eq' && value) {
                 newEntities = newEntities.filter(entity => entity[field] == value);
             } else if (operation === 'date_ge' && value) {
-                //newEntities = newEntities.filter(entity => entity[field] == value);
-                console.log("date ge: ", value);
+                try {
+                    var unixTime = value.format("x");
+                    newEntities = newEntities.filter(entity => {
+                        return entity[field] >= unixTime;
+                    });
+                } catch (ex) { }
             } else if (operation === 'date_le' && value) {
-                //newEntities = newEntities.filter(entity => entity[field] == value);
-                console.log("date le: ", value);
+                try {
+                    var unixTime = value.format("x");
+                    newEntities = newEntities.filter(entity => {
+                        return entity[field] <= unixTime;
+                    });
+                } catch (ex) { }
             }
         });
         return newEntities;
