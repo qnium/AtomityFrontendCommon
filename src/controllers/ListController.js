@@ -4,7 +4,7 @@ var events = require('qnium-events');
 
 let ListControllerEvents =
 {
-    // actions
+    // events handled by controller
     refresh: events().create({targetName: String}),
     deleteRecord: events().create({targetName: String, data: Object}),
     editRecord: events().create({targetName: String, data: Object}),
@@ -16,7 +16,7 @@ let ListControllerEvents =
     customAction: events().create({targetName: String, data: Object}),
     updateEntities: events().create({entitiesName: Array}),
 
-    // events
+    // events emitted by controller
     stateChanged: events().create({sourceName: String, data: Object})
 }
 
