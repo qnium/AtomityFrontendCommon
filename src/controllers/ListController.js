@@ -1,6 +1,5 @@
-import dataProvider from '../services/FileDataProvider';
-
-var events = require('qnium-events');
+import DataProviderRegistry from '../services/DataProviderRegistry';
+import events from 'qnium-events';
 
 let ListControllerEvents =
 {
@@ -34,9 +33,8 @@ class ListController
             ListController.ctrlNameCounter = 0;
         }
         
-        dataProvider.init({apiEndpoint: 'demoApi'});
-        dataProvider.setSessionKey('demoSessionKey');
-        
+        let dataProviderName = null;
+
         // params
         if(params) {
             this.entitiesName = params.entitiesName;
@@ -46,7 +44,10 @@ class ListController
             this.pageDataLength = params.pageDataLength == 0 ? 0 : (params.pageDataLength || 10);
             this.useDummyRows = params.useDummyRows;
             this.entityKeyField = params.entityKeyField || "id";
+            dataProviderName = params.dataProviderName;
         }
+
+        this.dataProvider = DataProviderRegistry.get(dataProviderName);
 
         // vars
         this.actionInProgress = false;
@@ -92,7 +93,7 @@ class ListController
     deleteRecord(record)
     {
         this.setProgressState(true);
-        dataProvider.executeAction(this.entitiesName, this.deleteAction, [record]).then(result => {
+        this.dataProvider.executeAction(this.entitiesName, this.deleteAction, [record]).then(result => {
             this.setProgressState(false);
             this.refresh();
         });        
@@ -101,7 +102,7 @@ class ListController
     customAction(params)
     {
         this.setProgressState(true);
-        dataProvider.executeAction(this.entitiesName, params.action, params.payload).then(result => {
+        this.dataProvider.executeAction(this.entitiesName, params.action, params.payload).then(result => {
             this.setProgressState(false);
             this.refresh();
         });        
@@ -228,7 +229,7 @@ class ListController
             count: this.pageDataLength
         }
         
-        dataProvider.executeAction(this.entitiesName, this.readAction, params)
+        this.dataProvider.executeAction(this.entitiesName, this.readAction, params)
         .then(result =>
         {
             this.setProgressState(false);

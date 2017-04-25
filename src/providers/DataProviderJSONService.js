@@ -1,8 +1,8 @@
-class DataProvider
+class DataProviderJSONService
 {
-    constructor() {
-        this.sessionKey = null;
-        this.apiEndpoint = null;
+    constructor(apiEndpoint, sessionKey) {
+        this.sessionKey = sessionKey;
+        this.apiEndpoint = apiEndpoint;
     }
 
     executeAction(entity, action, payload) {
@@ -30,14 +30,6 @@ class DataProvider
             }
         });
     }
-
-    init(config) {
-        this.apiEndpoint = config.apiEndpoint;
-    }
-
-    setSessionKey(key) {
-        this.sessionKey = key;
-    }
 }
 
-export default new DataProvider();
+export default DataProviderJSONService;

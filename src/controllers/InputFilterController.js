@@ -1,7 +1,6 @@
-import dataProvider from '../services/FileDataProvider'
+import DataProviderRegistry from '../services/DataProviderRegistry';
 import {ListControllerEvents} from './ListController';
-
-var events = require('qnium-events');
+import events from 'qnium-events';
 
 class InputFilterController
 {
@@ -15,6 +14,8 @@ class InputFilterController
             operation: this.params.complexFilter ? "in" : (this.params.filteringOperation || "like"),
             value: undefined
         }
+
+        this.dataProvider = DataProviderRegistry.get(params.dataProviderName);
     }
     
     applyFilter(filterValue)
@@ -23,11 +24,11 @@ class InputFilterController
         {
             let complexFilter = {
                 field: this.params.complexFilter.filteringField,
-                operation: 'like',
+                operation: this.params.complexFilter.filteringOperation || 'like',
                 value: filterValue
             }
 
-            dataProvider.executeAction(this.params.complexFilter.entitiesName, "read", {filter: [complexFilter]})
+            this.dataProvider.executeAction(this.params.complexFilter.entitiesName, this.params.complexFilter.readAction || "read", {filter: [complexFilter]})
             .then(result => {
                 this.filter.value = result.data.map(item => item[this.params.complexFilter.key]);
                 events(ListControllerEvents.applyFilter).send({targetName: this.targetCtrl, data: this.filter});

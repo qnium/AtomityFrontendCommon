@@ -4,22 +4,17 @@ import 'moment-timezone';
 /**
  * Provides access to backend API.
  */
-class FileDataProvider
+class DataProviderJSONFile
 {
-    constructor(){
+    constructor(folder, sessionKey){
         /**
          * Session key for requests that need authorization.
          */
-        this.sessionKey = null;
-
-        /**
-         * Configuration for data provider.
-         */
-        this.providerConfig = null;
+        this.sessionKey = sessionKey;
 
         this.storage = {};
 
-        this.jsonFolder = "test_data";
+        this.jsonFolder = folder;
 
         this.relatedEntityParameters = null;
 
@@ -128,7 +123,7 @@ class FileDataProvider
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve();
-            }, 1000);
+            }, 500);
         });
     }    
 
@@ -275,10 +270,6 @@ class FileDataProvider
     setSessionKey(key) {
         this.sessionKey = key;
     }
-
-    init(config) {
-        this.providerConfig = config;
-    }
 }
 
-export default new FileDataProvider();
+export default DataProviderJSONFile;

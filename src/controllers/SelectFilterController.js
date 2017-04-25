@@ -1,8 +1,7 @@
-import dataProvider from '../services/FileDataProvider'
+import DataProviderRegistry from '../services/DataProviderRegistry';
 import {ListControllerEvents} from './ListController';
 import {ListController} from './ListController';
-
-var events = require('qnium-events');
+import events from 'qnium-events';
 
 class SelectFilterController
 {
@@ -24,7 +23,8 @@ class SelectFilterController
             ctrlName: this.params.listCtrlName,
             entitiesName: this.params.entitiesName,
             readAction: this.readAction,
-            pageDataLength: 0
+            pageDataLength: 0,
+            dataProviderName: this.params.dataProviderName
         });
     }
     
