@@ -64,7 +64,33 @@ class DataProviderJSONFile
     }
 
     getValidators(entityName) {
-        return this.getPromiseWithScopeDigest(() => this.getEmptyDataWithTotalCount(entityName));
+        return this.getPromiseWithScopeDigest().then(() =>
+            {
+                let resultValidators = null;
+                let storageValidators = this.storage[entityName].validators;
+
+                if(this.storage[entityName] && storageValidators)
+                {
+                    resultValidators = [];
+
+                    for (let key in storageValidators)
+                    {
+                        let fieldValidator = { fieldName: key};
+                        let validatorFn = "function (object) { var err = null;";
+                        
+                        storageValidators[key].forEach((item) => {
+                            validatorFn += item;
+                            validatorFn += "if (err != null) return err;";
+                        });
+
+                        validatorFn += "return null; }";
+                        fieldValidator.validationCode = validatorFn;
+                        resultValidators.push(fieldValidator);
+                    }
+                }
+                return resultValidators;
+            }
+        );
     }
 
     createEntity(entityName, record) {
