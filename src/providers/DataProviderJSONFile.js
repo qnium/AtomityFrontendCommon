@@ -112,7 +112,7 @@ class DataProviderJSONFile
                     let relatedEntities = result.data;
                     return this.storage[entityName].records.forEach((entity, i, arr) => {
                         entity[relationship.relatedEntity] = relatedEntities.find((relatedEntity, index, array) =>
-                            entity[relationship.field] == relatedEntity[relationship.relatedEntityField]);
+                            entity[relationship.field] == relatedEntity[relationship.relatedEntityField]) || {} ;
                     });
                 }));
         });
@@ -251,7 +251,7 @@ class DataProviderJSONFile
     }
 
     addToStoredEntities(record, entityName) {
-        var newEntity = Object.create(record);
+        var newEntity = Object.assign({}, record);
         var entities = this.storage[entityName].records;
         newEntity.id = entities[entities.length - 1].id + 1;
         entities.push(newEntity);
