@@ -9,9 +9,9 @@ class ValidationController
         this.validators = {};
         this.dataProvider.executeAction(params.entitiesName, "validators").then(result =>
         {
-            if(result)
+            if(result.result)
             {
-                result.forEach(validator => {
+                result.result.forEach(validator => {
                     let fn;
                     this.validators[validator.fieldName] = {
                         validate: eval( "fn = " + validator.validationCode),

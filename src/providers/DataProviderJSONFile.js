@@ -88,7 +88,7 @@ class DataProviderJSONFile
                         resultValidators.push(fieldValidator);
                     }
                 }
-                return resultValidators;
+                return {result: resultValidators};
             }
         );
     }
@@ -137,8 +137,16 @@ class DataProviderJSONFile
                 .then(result => {
                     let relatedEntities = result.data;
                     return this.storage[entityName].records.forEach((entity, i, arr) => {
-                        entity[relationship.relatedEntity] = relatedEntities.find((relatedEntity, index, array) =>
-                            entity[relationship.field] == relatedEntity[relationship.relatedEntityField]) || {} ;
+                        {
+                            let foundRelatedEntity = relatedEntities.find((relatedEntity, index, array) =>
+                                entity[relationship.field][relationship.relatedEntityField] == relatedEntity[relationship.relatedEntityField]);
+                            if(foundRelatedEntity) {
+                                entity[relationship.relatedEntity] = foundRelatedEntity;
+                                entity[relationship.filtering_field_name] = foundRelatedEntity[relationship.relatedEntityField];
+                            } else {
+                                entity[relationship.relatedEntity] = {};
+                            }
+                        }
                     });
                 }));
         });
