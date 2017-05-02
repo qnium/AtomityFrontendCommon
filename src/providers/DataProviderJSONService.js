@@ -23,7 +23,7 @@ class DataProviderJSONService
         .then(response => response.json())
         .then(result => {
             if (result.error) {
-                throw new Error(result.error);
+                throw {message: result.error, ext: result};
             }
             else {
                 return result;
