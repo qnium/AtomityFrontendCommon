@@ -25,7 +25,8 @@ class DataProviderJSONFile
             'delete': this.deleteEntity.bind(this),
             'validators': this.getValidators.bind(this),
             'readRelatedEntities': this.getRelatedEntityData.bind(this),
-            'createReadRequest': this.createReadRequest.bind(this)            
+            'createReadRequest': this.createReadRequest.bind(this),
+            'fakeAction': this.fakeAction.bind(this)
         };
     }
 
@@ -47,6 +48,11 @@ class DataProviderJSONFile
      * Action functions.
      * Begin
      */
+
+     fakeAction(){
+         return this.getPromiseWithScopeDigest();
+     }
+
     getEntityData(entityName, data) {
         var req = this.createReadRequest(entityName, data);
         var loaded = this.storage[entityName] ? this.getPromiseWithScopeDigest() : this.loadEntitiesFromJson(entityName);
