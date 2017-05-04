@@ -6,6 +6,8 @@ let DialogResult = {
     cancel: "cancel"
 }
 
+let container;
+
 let DialogService = 
 {
     showDialog: (dialogTemplate, dialogData, parentElement) =>
@@ -19,8 +21,12 @@ let DialogService =
             if(parentElement) {
                 dialogContainer = parentElement;
             } else {
-                dialogContainer = document.createElement("div");
-                document.body.appendChild(dialogContainer);
+                if(container){
+                    document.body.removeChild(container);
+                }                    
+                container = document.createElement("div");
+                document.body.appendChild(container);
+                dialogContainer = container;
             }
             
             ReactDOM.render(
