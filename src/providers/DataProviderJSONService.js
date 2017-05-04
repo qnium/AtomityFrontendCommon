@@ -30,6 +30,14 @@ class DataProviderJSONService
             }
         });
     }
+    
+    init(config) {
+        this.apiEndpoint = config.apiEndpoint;
+    }
+
+    setSessionKey(key) {
+        this.sessionKey = key;
+    }
 }
 
 export default DataProviderJSONService;
