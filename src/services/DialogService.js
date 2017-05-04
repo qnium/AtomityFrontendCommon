@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
+let DialogResult = {
+    ok: "ok",
+    cancel: "cancel"
+}
+
 let DialogService = 
 {
     showDialog: (dialogTemplate, dialogData, parentElement) =>
@@ -26,4 +31,5 @@ let DialogService =
     }
 }
 
-module.exports = DialogService;
+export {DialogResult};
+export default DialogService;

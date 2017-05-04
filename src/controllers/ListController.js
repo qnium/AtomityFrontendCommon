@@ -5,7 +5,7 @@ let ListControllerEvents =
 {
     // events handled by controller
     refresh: events().create({targetName: String}),
-    deleteRecord: events().create({targetName: String, data: Object}),
+    deleteRecords: events().create({targetName: String, data: Object}),
     editRecord: events().create({targetName: String, data: Object}),
     selectPage: events().create({targetName: String, data: Object}),
     applyFilter: events().create({targetName: String, data: Object}),
@@ -61,7 +61,7 @@ class ListController
         this.currentSort = {};
         
         events(ListControllerEvents.refresh).handle(event => { this.doAction(this.refresh, event); });
-        events(ListControllerEvents.deleteRecord).handle(event => { this.doAction(this.deleteRecord, event); });
+        events(ListControllerEvents.deleteRecords).handle(event => { this.doAction(this.deleteRecord, event); });
         events(ListControllerEvents.editRecord).handle(event => { this.doAction(this.editRecord, event); });
         events(ListControllerEvents.selectPage).handle(event => { this.doAction(this.selectPage, event); });
         events(ListControllerEvents.applyFilter).handle(event => { this.doAction(this.applyFilter, event); });
@@ -90,10 +90,10 @@ class ListController
         }
     }
     
-    deleteRecord(record)
+    deleteRecord(records)
     {
         this.setProgressState(true);
-        this.dataProvider.executeAction(this.entitiesName, this.deleteAction, [record]).then(result => {
+        this.dataProvider.executeAction(this.entitiesName, this.deleteAction, records).then(result => {
             this.setProgressState(false);
             this.refresh();
         });        
