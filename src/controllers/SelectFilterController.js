@@ -19,13 +19,15 @@ class SelectFilterController
             value: undefined
         }
 
-        this.listCtrl = new ListController({
-            ctrlName: this.params.listCtrlName,
-            entitiesName: this.params.entitiesName,
-            readAction: this.readAction,
-            pageDataLength: 0,
-            dataProviderName: this.params.dataProviderName
-        });
+        if(this.params.entitiesName) {
+            this.listCtrl = new ListController({
+                ctrlName: this.params.listCtrlName,
+                entitiesName: this.params.entitiesName,
+                readAction: this.readAction,
+                pageDataLength: 0,
+                dataProviderName: this.params.dataProviderName
+            });
+        }
     }
     
     applyFilter(filterValue)
