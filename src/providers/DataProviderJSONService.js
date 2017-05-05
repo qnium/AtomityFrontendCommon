@@ -1,8 +1,9 @@
 class DataProviderJSONService
 {
-    constructor(apiEndpoint, sessionKey) {
-        this.sessionKey = sessionKey;
-        this.apiEndpoint = apiEndpoint;
+    constructor(params) {
+        this.sessionKey = params.sessionKey;
+        this.apiEndpoint = params.apiEndpoint;
+        this.errorHandler = params.errorHandler || function() {};
     }
 
     executeAction(entity, action, payload) {

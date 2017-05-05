@@ -6,8 +6,10 @@ class InputFilterController
 {
     constructor(params)
     {
+        let self = this;
         this.params = params;
         this.targetCtrl = this.params.targetListCtrlName;
+        this.lastComplexFltVal = null;
 
         this.filter = {
             field: this.params.filteringField,
@@ -16,12 +18,24 @@ class InputFilterController
         }
 
         this.dataProvider = DataProviderRegistry.get(params.dataProviderName);
+
+        if(this.params.complexFilter)
+        {
+            events(ListControllerEvents.updateEntities).handle(event => {
+                let entitiesToUpdate = event.find(item => item === self.params.complexFilter.relatedEntities);
+                if(entitiesToUpdate) {
+                    self.applyFilter(this.lastComplexFltVal);
+                    console.log("InpFlt", entitiesToUpdate);
+                }
+            });
+        }
     }
     
     applyFilter(filterValue)
     {
         if(this.params.complexFilter)
         {
+            this.lastComplexFltVal = filterValue;
             let complexFilter = {
                 field: this.params.complexFilter.filteringField,
                 operation: this.params.complexFilter.filteringOperation || 'like',
