@@ -12,6 +12,8 @@ class DataProviderJSONFile
          */
         this.sessionKey = sessionKey;
 
+        this.errorHandler = function(errorMessage) { throw errorMessage };
+
         this.storage = {};
 
         this.jsonFolder = folder;

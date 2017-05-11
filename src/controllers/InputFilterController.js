@@ -46,7 +46,7 @@ class InputFilterController
             .then(result => {
                 this.filter.value = result.data.map(item => item[this.params.complexFilter.key]);
                 events(ListControllerEvents.applyFilter).send({targetName: this.targetCtrl, data: this.filter});
-            });
+            }, err => { this.dataProvider.errorHandler(err.error); });
         } else {
             this.filter.value = filterValue;
             events(ListControllerEvents.applyFilter).send({targetName: this.targetCtrl, data: this.filter});

@@ -3,7 +3,7 @@ class DataProviderJSONService
     constructor(params) {
         this.sessionKey = params.sessionKey;
         this.apiEndpoint = params.apiEndpoint;
-        this.errorHandler = params.errorHandler || function() {};
+        this.errorHandler = params.errorHandler || function(errorMessage) { throw errorMessage };
     }
 
     executeAction(entity, action, payload) {
@@ -23,11 +23,17 @@ class DataProviderJSONService
         })
         .then(response => response.json())
         .then(result => {
-            if (result.error) {
-                throw {message: result.error, ext: result};
+            if (result.error || result.errorCode) {
+                throw result;
             }
             else {
                 return result;
+            }
+        }).catch(err => {
+            if(err.name === "TypeError" && err.message === "Failed to fetch"){
+                return Promise.reject({error: "Server inaccessible"});
+            } else {
+                throw err;
             }
         });
     }
