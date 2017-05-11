@@ -1,6 +1,9 @@
 import DataProviderRegistry from '../services/DataProviderRegistry';
 import events from 'qnium-events';
 
+let ctrlNameCounter = 0;
+let defaultCtrlName = "defaultCtrlName";
+
 let ListControllerEvents =
 {
     // events handled by controller
@@ -21,24 +24,24 @@ let ListControllerEvents =
 
 class ListController
 {
-    static ctrlNameCounter;
+    //static ctrlNameCounter;
 
-    static get defaultCtrlName() {
-        return "defaultCtrlName";
-    }
+    // static get defaultCtrlName() {
+    //     return "defaultCtrlName";
+    // }
     
     constructor(params)
     {
-        if(!ListController.ctrlNameCounter){
-            ListController.ctrlNameCounter = 0;
-        }
+        // if(!ListController.ctrlNameCounter){
+        //     ListController.ctrlNameCounter = 0;
+        // }
         
         let dataProviderName = null;
 
         // params
         if(params) {
             this.entitiesName = params.entitiesName;
-            this.ctrlName = params.ctrlName || (ListController.defaultCtrlName + ListController.ctrlNameCounter++);
+            this.ctrlName = params.ctrlName || (defaultCtrlName + ctrlNameCounter++);
             this.readAction = params.readAction || "read";
             this.deleteAction = params.deleteAction || "delete";
             this.pageDataLength = params.pageDataLength == 0 ? 0 : (params.pageDataLength || 10);
