@@ -36,17 +36,23 @@ class InputFilterController
         if(this.params.complexFilter)
         {
             this.lastComplexFltVal = filterValue;
-            let complexFilter = {
-                field: this.params.complexFilter.filteringField,
-                operation: this.params.complexFilter.filteringOperation || 'like',
-                value: filterValue
-            }
+            
+            if(filterValue) {
+                let complexFilter = {
+                    field: this.params.complexFilter.filteringField,
+                    operation: 'like',
+                    value: filterValue
+                }
 
-            this.dataProvider.executeAction(this.params.complexFilter.entitiesName, this.params.complexFilter.readAction || "read", {filter: [complexFilter]})
-            .then(result => {
-                this.filter.value = result.data.map(item => item[this.params.complexFilter.key]);
+                this.dataProvider.executeAction(this.params.complexFilter.entitiesName, "read", {filter: [complexFilter]})
+                .then(result => {
+                    this.filter.value = result.data.map(item => item[this.params.complexFilter.key]);
+                    events(ListControllerEvents.applyFilter).send({targetName: this.targetCtrl, data: this.filter});
+                }, err => { this.dataProvider.errorHandler(err.error); });
+            } else {
+                this.filter.value = null;
                 events(ListControllerEvents.applyFilter).send({targetName: this.targetCtrl, data: this.filter});
-            }, err => { this.dataProvider.errorHandler(err.error); });
+            }            
         } else {
             this.filter.value = filterValue;
             events(ListControllerEvents.applyFilter).send({targetName: this.targetCtrl, data: this.filter});
