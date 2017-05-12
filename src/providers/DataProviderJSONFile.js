@@ -140,24 +140,26 @@ class DataProviderJSONFile
     fillRelatedEntities(entityName) {
         var promices = [];
         var relationships = this.storage[entityName].relationships;
-        relationships.forEach((relationship, i, arr) => {
-            promices.push(this.getEntityData(relationship.relatedEntity, {})
-                .then(result => {
-                    let relatedEntities = result.data;
-                    return this.storage[entityName].records.forEach((entity, i, arr) => {
-                        {
-                            let foundRelatedEntity = relatedEntities.find((relatedEntity, index, array) =>
-                                entity[relationship.field][relationship.relatedEntityField] == relatedEntity[relationship.relatedEntityField]);
-                            if(foundRelatedEntity) {
-                                entity[relationship.relatedEntity] = foundRelatedEntity;
-                                entity[relationship.filtering_field_name] = foundRelatedEntity[relationship.relatedEntityField];
-                            } else {
-                                entity[relationship.relatedEntity] = {};
+        if(relationships) {
+            relationships.forEach((relationship, i, arr) => {
+                promices.push(this.getEntityData(relationship.relatedEntity, {})
+                    .then(result => {
+                        let relatedEntities = result.data;
+                        return this.storage[entityName].records.forEach((entity, i, arr) => {
+                            {
+                                let foundRelatedEntity = relatedEntities.find((relatedEntity, index, array) =>
+                                    entity[relationship.field][relationship.relatedEntityField] == relatedEntity[relationship.relatedEntityField]);
+                                if(foundRelatedEntity) {
+                                    entity[relationship.relatedEntity] = foundRelatedEntity;
+                                    entity[relationship.filtering_field_name] = foundRelatedEntity[relationship.relatedEntityField];
+                                } else {
+                                    entity[relationship.relatedEntity] = {};
+                                }
                             }
-                        }
-                    });
-                }));
-        });
+                        });
+                    }));
+            });
+        }
         return Promise.all(promices);
     }
 
