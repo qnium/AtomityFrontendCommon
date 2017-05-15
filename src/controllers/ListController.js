@@ -87,7 +87,7 @@ class ListController
     customAction(params)
     {
         this.setProgressState(true);
-        this.dataProvider.executeAction(this.entitiesName, params.action, params.payload).then(result => {
+        this.dataProvider.executeAction(this.entitiesName, params.action, params.data).then(result => {
             this.setProgressState(false);
             this.refresh();
         }, err => { this.dataProvider.errorHandler(err.error); });        
