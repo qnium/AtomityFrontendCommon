@@ -6,11 +6,11 @@ class DataProviderJSONService
         this.errorHandler = params.errorHandler || function(errorMessage) { throw errorMessage };
     }
 
-    executeAction(entity, action, payload) {
+    executeAction(entity, action, data) {
         let req = {
             entityName: entity,
             action: action,
-            data: payload,
+            data: data,
             sessionKey: this.sessionKey
         };
         return fetch(this.apiEndpoint, {
