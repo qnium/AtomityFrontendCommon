@@ -9,7 +9,6 @@ let ListControllerEvents =
     // events handled by controller
     refresh: events().create({targetName: String}),
     deleteRecords: events().create({targetName: String, data: Object}),
-    editRecord: events().create({targetName: String, data: Object}),
     selectPage: events().create({targetName: String, data: Object}),
     applyFilter: events().create({targetName: String, data: Object}),
     sort: events().create({targetName: String, data: Object}),
@@ -24,34 +23,18 @@ let ListControllerEvents =
 
 class ListController
 {
-    //static ctrlNameCounter;
-
-    // static get defaultCtrlName() {
-    //     return "defaultCtrlName";
-    // }
-    
     constructor(params)
     {
-        // if(!ListController.ctrlNameCounter){
-        //     ListController.ctrlNameCounter = 0;
-        // }
-        
-        let dataProviderName = null;
-
         // params
-        if(params) {
-            this.entitiesName = params.entitiesName;
-            this.ctrlName = params.ctrlName || (defaultCtrlName + ctrlNameCounter++);
-            this.readAction = params.readAction || "read";
-            this.deleteAction = params.deleteAction || "delete";
-            this.pageDataLength = params.pageDataLength == 0 ? 0 : (params.pageDataLength || 10);
-            this.useDummyRows = params.useDummyRows;
-            this.entityKeyField = params.entityKeyField || "id";
-            dataProviderName = params.dataProviderName;
-        }
-
-        this.dataProvider = DataProviderRegistry.get(dataProviderName);
-
+        this.entitiesName = params.entitiesName;
+        this.ctrlName = params.ctrlName || (defaultCtrlName + ctrlNameCounter++);
+        this.readAction = params.readAction || "read";
+        this.deleteAction = params.deleteAction || "delete";
+        this.pageDataLength = params.pageDataLength == 0 ? 0 : (params.pageDataLength || 10);
+        this.useDummyRows = params.useDummyRows;
+        this.entityKeyField = params.entityKeyField || "id";
+        this.dataProvider = DataProviderRegistry.get(params.dataProviderName);
+        
         // vars
         this.actionInProgress = false;
         this.pageData = [];
@@ -65,7 +48,6 @@ class ListController
         
         events(ListControllerEvents.refresh).handle(event => { this.doAction(this.refresh, event); });
         events(ListControllerEvents.deleteRecords).handle(event => { this.doAction(this.deleteRecord, event); });
-        events(ListControllerEvents.editRecord).handle(event => { this.doAction(this.editRecord, event); });
         events(ListControllerEvents.selectPage).handle(event => { this.doAction(this.selectPage, event); });
         events(ListControllerEvents.applyFilter).handle(event => { this.doAction(this.applyFilter, event); });
         events(ListControllerEvents.sort).handle(event => { this.doAction(this.sortAction, event); });
@@ -250,10 +232,6 @@ class ListController
                 this.sendStateChangedEvent();
             }
         }, err => { this.dataProvider.errorHandler(err.error); });                
-    }
-
-    editRecord(entity){
-        console.log("ListCtrl - editRecord: ", entity);
     }
 
     objectToArray(obj) {
