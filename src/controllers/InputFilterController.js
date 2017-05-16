@@ -17,10 +17,10 @@ class InputFilterController
             value: undefined
         }
 
-        this.dataProvider = DataProviderRegistry.get(params.dataProviderName);
-
         if(this.params.complexFilter)
         {
+            this.dataProvider = DataProviderRegistry.get(params.dataProviderName);
+
             events(ListControllerEvents.updateEntities).handle(event => {
                 let entitiesToUpdate = event.find(item => item === self.params.complexFilter.relatedEntities);
                 if(entitiesToUpdate) {
@@ -40,11 +40,11 @@ class InputFilterController
             if(filterValue) {
                 let complexFilter = {
                     field: this.params.complexFilter.filteringField,
-                    operation: 'like',
+                    operation: this.params.complexFilter.filteringOperation || "like",
                     value: filterValue
                 }
 
-                this.dataProvider.executeAction(this.params.complexFilter.entitiesName, "read", {filter: [complexFilter]})
+                this.dataProvider.executeAction(this.params.complexFilter.entitiesName, this.params.complexFilter.readAction || "read", {filter: [complexFilter]})
                 .then(result => {
                     this.filter.value = result.data.map(item => item[this.params.complexFilter.key]);
                     events(ListControllerEvents.applyFilter).send({targetName: this.targetCtrl, data: this.filter});

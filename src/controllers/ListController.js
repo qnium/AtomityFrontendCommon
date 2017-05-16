@@ -9,7 +9,7 @@ let ListControllerEvents =
     // events handled by controller
     refresh: events().create({targetName: String}),
     deleteRecords: events().create({targetName: String, data: Object}),
-    selectPage: events().create({targetName: String, data: Object}),
+    selectPage: events().create({targetName: String, data: Number}),
     applyFilter: events().create({targetName: String, data: Object}),
     sort: events().create({targetName: String, data: Object}),
     setRowChecked: events().create({targetName: String, data: Object}),
