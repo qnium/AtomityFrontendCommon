@@ -46,7 +46,7 @@ class InputFilterController
 
                 this.dataProvider.executeAction(this.params.complexFilter.entitiesName, this.params.complexFilter.readAction || "read", {filter: [complexFilter]})
                 .then(result => {
-                    this.filter.value = result.data.map(item => item[this.params.complexFilter.key]);
+                    this.filter.value = result.data.map(item => item[this.params.complexFilter.keyField || "id"]);
                     events(ListControllerEvents.applyFilter).send({targetName: this.targetCtrl, data: this.filter});
                 }, err => { this.dataProvider.errorHandler(err.error); });
             } else {
