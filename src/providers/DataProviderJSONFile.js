@@ -150,10 +150,10 @@ class DataProviderJSONFile
                                 let foundRelatedEntity = relatedEntities.find((relatedEntity, index, array) =>
                                     entity[relationship.field][relationship.relatedEntityField] == relatedEntity[relationship.relatedEntityField]);
                                 if(foundRelatedEntity) {
-                                    entity[relationship.relatedEntity] = foundRelatedEntity;
+                                    entity[relationship.field] = foundRelatedEntity;
                                     entity[relationship.filtering_field_name] = foundRelatedEntity[relationship.relatedEntityField];
                                 } else {
-                                    entity[relationship.relatedEntity] = {};
+                                    entity[relationship.field] = {};
                                 }
                             }
                         });
