@@ -51,19 +51,31 @@ class ListController
             });
         }
         
-        events(ListControllerEvents.refresh).handle(event => { this.doAction(this.refresh, event); });
-        events(ListControllerEvents.deleteRecords).handle(event => { this.doAction(this.deleteRecord, event); });
-        events(ListControllerEvents.selectPage).handle(event => { this.doAction(this.selectPage, event); });
-        events(ListControllerEvents.applyFilter).handle(event => { this.doAction(this.applyFilter, event); });
-        events(ListControllerEvents.sort).handle(event => { this.doAction(this.sortAction, event); });
-        events(ListControllerEvents.setRowChecked).handle(event => { this.doAction(this.setRowCheckedAction, event); });
-        events(ListControllerEvents.setAllChecked).handle(event => { this.doAction(this.setAllCheckedAction, event); });
-        events(ListControllerEvents.customAction).handle(event => { this.doAction(this.customAction, event); });
-        events(ListControllerEvents.updateEntities).handle(event => this.updateEntities(event));
+        this.refreshHandlerRemover = events(ListControllerEvents.refresh).handle(event => { this.doAction(this.refresh, event); });
+        this.deleteRecordsHandlerRemover = events(ListControllerEvents.deleteRecords).handle(event => { this.doAction(this.deleteRecord, event); });
+        this.selectPageHandlerRemover = events(ListControllerEvents.selectPage).handle(event => { this.doAction(this.selectPage, event); });
+        this.applyFilterHandlerRemover = events(ListControllerEvents.applyFilter).handle(event => { this.doAction(this.applyFilter, event); });
+        this.sortHandlerRemover = events(ListControllerEvents.sort).handle(event => { this.doAction(this.sortAction, event); });
+        this.setRowCheckedHandlerRemover = events(ListControllerEvents.setRowChecked).handle(event => { this.doAction(this.setRowCheckedAction, event); });
+        this.setAllCheckedHandlerRemover = events(ListControllerEvents.setAllChecked).handle(event => { this.doAction(this.setAllCheckedAction, event); });
+        this.customActionHandlerRemover = events(ListControllerEvents.customAction).handle(event => { this.doAction(this.customAction, event); });
+        this.updateEntitiesHandlerRemover = events(ListControllerEvents.updateEntities).handle(event => this.updateEntities(event));
 
         this.refresh();
     }
 
+    destroy(){
+        this.refreshHandlerRemover();
+        this.deleteRecordsHandlerRemover();
+        this.selectPageHandlerRemover();
+        this.applyFilterHandlerRemover();
+        this.sortHandlerRemover();
+        this.setRowCheckedHandlerRemover();
+        this.setAllCheckedHandlerRemover();
+        this.customActionHandlerRemover();
+        this.updateEntitiesHandlerRemover();
+    }
+    
     getFilterName(filter) {
         return filter.field + "-" + filter.operation;
     }
