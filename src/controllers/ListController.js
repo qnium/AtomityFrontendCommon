@@ -25,16 +25,6 @@ class ListController
 {
     constructor(params)
     {
-        // params
-        this.entitiesName = params.entitiesName;
-        this.ctrlName = params.ctrlName || (defaultCtrlName + ctrlNameCounter++);
-        this.readAction = params.readAction || "read";
-        this.deleteAction = params.deleteAction || "delete";
-        this.pageDataLength = params.pageDataLength == 0 ? 0 : (params.pageDataLength || 10);
-        this.useDummyRows = params.useDummyRows;
-        this.entityKeyField = params.entityKeyField || "id";
-        this.dataProvider = DataProviderRegistry.get(params.dataProviderName);
-        
         // vars
         this.actionInProgress = false;
         this.pageData = [];
@@ -45,6 +35,21 @@ class ListController
         this.prevPageAvailable = false;
         this.filters = {};
         this.currentSort = {};
+        
+        // params
+        this.entitiesName = params.entitiesName;
+        this.ctrlName = params.ctrlName || (defaultCtrlName + ctrlNameCounter++);
+        this.readAction = params.readAction || "read";
+        this.deleteAction = params.deleteAction || "delete";
+        this.pageDataLength = params.pageDataLength == 0 ? 0 : (params.pageDataLength || 10);
+        this.useDummyRows = params.useDummyRows;
+        this.entityKeyField = params.entityKeyField || "id";
+        this.dataProvider = DataProviderRegistry.get(params.dataProviderName);
+        if(params.initFilters){
+            params.initFilters.forEach(filter => {
+                this.setFilter(filter);
+            });
+        }
         
         events(ListControllerEvents.refresh).handle(event => { this.doAction(this.refresh, event); });
         events(ListControllerEvents.deleteRecords).handle(event => { this.doAction(this.deleteRecord, event); });
@@ -93,10 +98,15 @@ class ListController
         }, err => { this.dataProvider.errorHandler(err.error); });        
     }
     
+    setFilter(filter)
+    {
+        const filterName = this.getFilterName(filter);
+        this.filters[filterName] = filter;
+    }
+    
     applyFilter(filter)
     {
-        let filterName = this.getFilterName(filter);
-        this.filters[filterName] = filter;
+        this.setFilter(filter);
         this.refresh();
     }
 
