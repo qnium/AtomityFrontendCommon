@@ -8,17 +8,17 @@ let ListControllerEvents =
 {
     // events handled by controller
     refresh: events().create({targetName: String}),
-    deleteRecords: events().create({targetName: String, data: Object}),
+    deleteRecords: events().create({targetName: String, data: {}}),
     selectPage: events().create({targetName: String, data: Number}),
-    applyFilter: events().create({targetName: String, data: Object}),
-    sort: events().create({targetName: String, data: Object}),
-    setRowChecked: events().create({targetName: String, data: Object}),
-    setAllChecked: events().create({targetName: String, data: Object}),
-    customAction: events().create({targetName: String, data: Object}),
+    applyFilter: events().create({targetName: String, data: {}}),
+    sort: events().create({targetName: String, data: {}}),
+    setRowChecked: events().create({targetName: String, data: {}}),
+    setAllChecked: events().create({targetName: String, data: {}}),
+    customAction: events().create({targetName: String, data: {}}),
     updateEntities: events().create({entitiesName: Array}),
 
     // events emitted by controller
-    stateChanged: events().create({sourceName: String, data: Object})
+    stateChanged: events().create({sourceName: String, data: {}})
 }
 
 class ListController
