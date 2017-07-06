@@ -16,7 +16,7 @@ class DataProviderJSONFile
 
         this.storage = {};
 
-        this.jsonFolder = folder;
+        this.dataSource = folder;
 
         this.relatedEntityParameters = null;
 
@@ -125,16 +125,24 @@ class DataProviderJSONFile
      * End
      */
 
-    loadEntitiesFromJson(entityName) {
+    getDataFromJSON(entityName){
         let self = this;
-        return fetch(this.jsonFolder + '/' + entityName + '.json')
-        .then(response => {
-             return response.json()
-        })
-        .then(response => {
-                self.storage[entityName] = response;
-                return self.fillRelatedEntities(entityName);
-            });
+        if(typeof this.dataSource === "string"){
+            return fetch(this.dataSource + '/' + entityName + '.json')
+            .then(response => {
+                return response.json()
+            })
+        } else {
+            return Promise.resolve(this.dataSource.getData(entityName));            
+        }
+    }
+
+    loadEntitiesFromJson(entityName) {
+        let self = this;        
+        return this.getDataFromJSON(entityName).then(response => {
+            self.storage[entityName] = response;
+            return self.fillRelatedEntities(entityName);
+        });
     }
 
     fillRelatedEntities(entityName) {
