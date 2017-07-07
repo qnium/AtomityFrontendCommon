@@ -305,7 +305,8 @@ class DataProviderJSONFile
     addToStoredEntities(record, entityName) {
         var newEntity = Object.assign({}, record);
         var entities = this.storage[entityName].records;
-        newEntity.id = entities[entities.length - 1].id + 1;
+        if(!newEntity.id)
+            newEntity.id = entities[entities.length - 1] ? entities[entities.length - 1].id + 1 : 1;
         entities.push(newEntity);
     }
 
