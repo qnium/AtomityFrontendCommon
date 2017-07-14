@@ -267,7 +267,7 @@ class DataProviderJSONFile
                     ) !== undefined
                 );
 
-            } else if (operation === 'eq' && value) {
+            } else if (operation === 'eq' && (value || value === false)) {
                 newEntities = newEntities.filter(entity => entity[field] == value);
             } else if (operation === 'date_ge' && value) {
                 try {
