@@ -6,8 +6,7 @@
   "dependencies": {
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.13",
-    "qnium-events": "git+https://github.com/qnium/events.git#9177343",
-    "whatwg-fetch-timeout": "^2.0.2-timeout"
+    "qnium-events": "git+https://github.com/qnium/events.git#9177343"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
