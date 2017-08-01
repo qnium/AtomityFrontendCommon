@@ -1,8 +1,13 @@
+import 'whatwg-fetch-timeout';
+
+const DEFAULT_TIMEOUT = 30000;
+
 class DataProviderJSONService
 {
     constructor(params) {
         this.sessionKey = params.sessionKey;
         this.apiEndpoint = params.apiEndpoint;
+        this.timeout = params.timeout || DEFAULT_TIMEOUT;
         this.errorHandler = params.errorHandler || function(errorMessage) { throw errorMessage };
     }
 
@@ -11,7 +16,8 @@ class DataProviderJSONService
             entityName: entity,
             action: action,
             data: data,
-            sessionKey: this.sessionKey
+            sessionKey: this.sessionKey,
+            timeout: this.timeout
         };
         return fetch(this.apiEndpoint, {
             method: 'POST',
