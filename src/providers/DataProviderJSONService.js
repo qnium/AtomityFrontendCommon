@@ -1,8 +1,12 @@
+const DEFAULT_TIMEOUT = 20000;
+const TIMEOUT_ERROR_MESSAGE = 'Request timed out. Please check your Internet connection.';
+
 class DataProviderJSONService
 {
     constructor(params) {
         this.sessionKey = params.sessionKey;
         this.apiEndpoint = params.apiEndpoint;
+        this.timeout = params.timeout || DEFAULT_TIMEOUT;
         this.errorHandler = params.errorHandler || function(errorMessage) { throw errorMessage };
     }
 
@@ -13,7 +17,7 @@ class DataProviderJSONService
             data: data,
             sessionKey: this.sessionKey
         };
-        return fetch(this.apiEndpoint, {
+        const fetchPromise = fetch(this.apiEndpoint, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -36,6 +40,12 @@ class DataProviderJSONService
                 throw err;
             }
         });
+
+        const timeoutPromise = new Promise((resolve, reject) => {
+            setTimeout(() => reject({error: TIMEOUT_ERROR_MESSAGE}), this.timeout)
+        });
+
+        return Promise.race([fetchPromise, timeoutPromise]);
     }
     
     init(config) {
