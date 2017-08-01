@@ -16,7 +16,7 @@ class DataProviderJSONFile
 
         this.storage = {};
 
-        this.jsonFolder = folder;
+        this.dataSource = folder;
 
         this.relatedEntityParameters = null;
 
@@ -125,16 +125,24 @@ class DataProviderJSONFile
      * End
      */
 
-    loadEntitiesFromJson(entityName) {
+    getDataFromJSON(entityName){
         let self = this;
-        return fetch(this.jsonFolder + '/' + entityName + '.json')
-        .then(response => {
-             return response.json()
-        })
-        .then(response => {
-                self.storage[entityName] = response;
-                return self.fillRelatedEntities(entityName);
-            });
+        if(typeof this.dataSource === "string"){
+            return fetch(this.dataSource + '/' + entityName + '.json')
+            .then(response => {
+                return response.json()
+            })
+        } else {
+            return Promise.resolve(this.dataSource.getData(entityName));            
+        }
+    }
+
+    loadEntitiesFromJson(entityName) {
+        let self = this;        
+        return this.getDataFromJSON(entityName).then(response => {
+            self.storage[entityName] = response;
+            return self.fillRelatedEntities(entityName);
+        });
     }
 
     fillRelatedEntities(entityName) {
@@ -259,7 +267,7 @@ class DataProviderJSONFile
                     ) !== undefined
                 );
 
-            } else if (operation === 'eq' && value) {
+            } else if (operation === 'eq' && (value || value === false)) {
                 newEntities = newEntities.filter(entity => entity[field] == value);
             } else if (operation === 'date_ge' && value) {
                 try {
@@ -297,7 +305,8 @@ class DataProviderJSONFile
     addToStoredEntities(record, entityName) {
         var newEntity = Object.assign({}, record);
         var entities = this.storage[entityName].records;
-        newEntity.id = entities[entities.length - 1].id + 1;
+        if(!newEntity.id)
+            newEntity.id = entities[entities.length - 1] ? entities[entities.length - 1].id + 1 : 1;
         entities.push(newEntity);
     }
 
