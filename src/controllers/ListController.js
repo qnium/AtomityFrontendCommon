@@ -98,7 +98,7 @@ class ListController
         this.dataProvider.executeAction(this.entitiesName, this.deleteAction, records).then(result => {
             this.setProgressState(false);
             this.refresh();
-        }, err => { this.dataProvider.errorHandler(err.error); });        
+        }, err => { this.dataProvider.errorHandler(err.error, err); });
     }
     
     customAction(params)
@@ -107,7 +107,7 @@ class ListController
         this.dataProvider.executeAction(this.entitiesName, params.action, params.data).then(result => {
             this.setProgressState(false);
             this.refresh();
-        }, err => { this.dataProvider.errorHandler(err.error); });        
+        }, err => { this.dataProvider.errorHandler(err.error, err); });        
     }
     
     setFilter(filter)
@@ -253,7 +253,7 @@ class ListController
                 }
                 this.sendStateChangedEvent();
             }
-        }, err => { this.dataProvider.errorHandler(err.error); });                
+        }, err => { this.dataProvider.errorHandler(err.error, err); });
     }
 
     objectToArray(obj) {
